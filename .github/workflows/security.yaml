@@ -50,12 +50,12 @@ jobs:
           output: trivy-fs.sarif
           ignore-unfixed: true
 
-      - uses: github/codeql-action/upload-sarif@v3
+      - uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-config.sarif
           category: trivy-config
 
-      - uses: github/codeql-action/upload-sarif@v3
+      - uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-fs.sarif
           category: trivy-fs
@@ -77,7 +77,7 @@ jobs:
           output_format: sarif
           output_file_path: checkov.sarif
           soft_fail: true
-      - uses: github/codeql-action/upload-sarif@v3
+      - uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: checkov.sarif
           category: checkov
@@ -100,7 +100,7 @@ jobs:
           results_format: sarif
           # Public repo — publish to the OpenSSF Scorecard registry.
           publish_results: true
-      - uses: github/codeql-action/upload-sarif@v3
+      - uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: scorecard.sarif
           category: scorecard
