@@ -17,7 +17,7 @@ jobs:
     name: tofu fmt
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - uses: opentofu/setup-opentofu@v1
@@ -29,7 +29,7 @@ jobs:
     name: tofu validate
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - uses: opentofu/setup-opentofu@v1
@@ -54,7 +54,7 @@ jobs:
     name: tflint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - uses: terraform-linters/setup-tflint@v4
@@ -67,7 +67,7 @@ jobs:
     name: trivy config
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - uses: aquasecurity/trivy-action@master
@@ -81,7 +81,7 @@ jobs:
     name: checkov
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - uses: bridgecrewio/checkov-action@master
@@ -94,7 +94,7 @@ jobs:
     name: gitleaks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
           fetch-depth: 0
@@ -106,7 +106,7 @@ jobs:
     name: terraform-docs drift
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - uses: terraform-docs/gh-actions@v1
