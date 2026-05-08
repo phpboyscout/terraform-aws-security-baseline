@@ -1,0 +1,119 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fmt:
+    name: tofu fmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_wrapper: false
+      - run: tofu fmt -recursive -check -diff .
+
+  validate:
+    name: tofu validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_wrapper: false
+      - name: Validate root, modules, and examples
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          fail=0
+          for d in . modules/*/ examples/*/; do
+            if compgen -G "${d}/*.tf" > /dev/null 2>&1 || compgen -G "${d}*.tf" > /dev/null 2>&1; then
+              echo "::group::validate ${d}"
+              ( cd "$d" && tofu init -backend=false -input=false >/dev/null && tofu validate ) || fail=1
+              echo "::endgroup::"
+            fi
+          done
+          exit "$fail"
+
+  tflint:
+    name: tflint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: terraform-linters/setup-tflint@v4
+      - run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: tflint --recursive --config="$(pwd)/.tflint.hcl"
+
+  trivy:
+    name: trivy config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: config
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+          ignore-unfixed: true
+
+  checkov:
+    name: checkov
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: bridgecrewio/checkov-action@master
+        with:
+          framework: terraform
+          quiet: true
+          soft_fail: false
+
+  gitleaks:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  terraform-docs:
+    name: terraform-docs drift
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: terraform-docs/gh-actions@v1
+        with:
+          working-dir: .
+          recursive: true
+          recursive-path: modules
+          output-file: README.md
+          output-method: inject
+          fail-on-diff: true

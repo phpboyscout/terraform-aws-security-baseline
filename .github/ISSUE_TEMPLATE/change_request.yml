@@ -1,0 +1,28 @@
+name: Change request
+description: Propose a new feature, an input/output addition, or a behaviour change.
+labels: ["change-request"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What do you want to change?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why?
+      description: What problem does this solve, or what capability does it unlock?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Sub-module(s) affected, breaking change y/n.
+  - type: checkboxes
+    id: spec
+    attributes:
+      label: Next step
+      options:
+        - label: I will open a spec in `docs/development/specs/` before any HCL PR.

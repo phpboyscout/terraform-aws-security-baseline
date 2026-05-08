@@ -1,0 +1,106 @@
+name: security
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"  # Monday 06:00 UTC
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Workflow-level permissions are MINIMAL. Each job grants the elevations
+# it actually needs at the job level. Scorecard's workflow verification
+# explicitly rejects globally-granted `security-events: write`, so this
+# layout is required for scorecard, and is good practice for the others
+# regardless. See https://github.com/ossf/scorecard-action#workflow-restrictions
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  trivy:
+    name: trivy config + vuln
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Trivy config scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: config
+          severity: HIGH,CRITICAL
+          format: sarif
+          output: trivy-config.sarif
+
+      - name: Trivy fs vuln scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          severity: HIGH,CRITICAL
+          format: sarif
+          output: trivy-fs.sarif
+          ignore-unfixed: true
+
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-config.sarif
+          category: trivy-config
+
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-fs.sarif
+          category: trivy-fs
+
+  checkov:
+    name: checkov
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: bridgecrewio/checkov-action@master
+        with:
+          framework: terraform
+          output_format: sarif
+          output_file_path: checkov.sarif
+          soft_fail: true
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: checkov.sarif
+          category: checkov
+
+  scorecard:
+    name: openssf scorecard
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      security-events: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3
+        with:
+          results_file: scorecard.sarif
+          results_format: sarif
+          # Public repo — publish to the OpenSSF Scorecard registry.
+          publish_results: true
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: scorecard.sarif
+          category: scorecard

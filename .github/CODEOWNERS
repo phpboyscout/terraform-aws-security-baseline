@@ -1,0 +1,10 @@
+* @phpboyscout
+
+# High-blast-radius paths — keep explicit even though the wildcard above
+# already catches them. Future narrower rules don't accidentally weaken
+# review by leaving these implicit.
+/.github/                  @phpboyscout
+/modules/                  @phpboyscout
+/main.tf                   @phpboyscout
+/variables.tf              @phpboyscout
+/outputs.tf                @phpboyscout

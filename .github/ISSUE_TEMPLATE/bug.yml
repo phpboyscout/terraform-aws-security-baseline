@@ -1,0 +1,41 @@
+name: Bug report
+description: Something in this module is wrong or misbehaving.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: module-version
+    attributes:
+      label: Module version
+      placeholder: "v0.1.0 / commit SHA"
+    validations:
+      required: true
+  - type: input
+    id: tofu-version
+    attributes:
+      label: OpenTofu / Terraform version
+      placeholder: "OpenTofu 1.11.6 / Terraform 1.10.x"
+    validations:
+      required: true
+  - type: input
+    id: aws-provider-version
+    attributes:
+      label: AWS provider version
+      placeholder: "6.x.y"
+  - type: textarea
+    id: caller
+    attributes:
+      label: How are you calling the module?
+      description: Paste the relevant `module "..." { source = "..."; ... }` block (redact secrets).
+      render: hcl
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs / plan output
+      render: shell
