@@ -89,6 +89,8 @@ data "aws_iam_policy_document" "logs_kms" {
 
 # ---------- Log bucket -------------------------------------------------
 
+#trivy:ignore:AWS-0089 CloudTrail itself is the audit log of bucket access — additional S3 access logs would duplicate the record and add another bucket to manage. Same rationale as checkov CKV_AWS_18 below.
+#trivy:ignore:AWS-0163 Trail-bucket-specific access-logging finding; same rationale as AWS-0089 above.
 resource "aws_s3_bucket" "logs" {
   # checkov:skip=CKV_AWS_18:CloudTrail itself is the audit log of bucket access — additional access logs would duplicate the record and add another bucket to manage.
   # checkov:skip=CKV_AWS_144:Cross-region replication is overkill for a private audit bucket; lifecycle + versioning + KMS gives durability and recovery.
@@ -245,6 +247,7 @@ data "aws_iam_policy_document" "logs_bucket" {
 
 # ---------- The trail itself ------------------------------------------
 
+#trivy:ignore:AWS-0162 CloudWatch Logs integration deliberately omitted — S3 + EventBridge is sufficient and CW Logs adds per-event ingestion cost without proportional signal. Same rationale as checkov CKV2_AWS_10 below.
 resource "aws_cloudtrail" "this" {
   # checkov:skip=CKV_AWS_252:Findings fan into SNS via the alerts sub-module's EventBridge rules — wiring SNS directly to the trail would duplicate alerts.
   # checkov:skip=CKV2_AWS_10:CloudWatch Logs integration deliberately omitted — S3 + EventBridge is sufficient for our use case and CloudWatch Logs adds per-event ingestion cost without additional signal at this scale.

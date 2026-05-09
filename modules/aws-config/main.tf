@@ -112,6 +112,7 @@ data "aws_iam_policy_document" "config_kms" {
 
 # ---------- History bucket --------------------------------------------
 
+#trivy:ignore:AWS-0089 CloudTrail (audit-logging sub-module) is the audit log of bucket access; bucket-level access logs would duplicate the record. Same rationale as checkov CKV_AWS_18 below.
 resource "aws_s3_bucket" "config" {
   # checkov:skip=CKV_AWS_18:CloudTrail (audit-logging sub-module) is the audit log of bucket access; bucket-level access logs would duplicate the record.
   # checkov:skip=CKV_AWS_144:Cross-region replication is overkill for a private Config history bucket; lifecycle + versioning + KMS gives durability and recovery.
