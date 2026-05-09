@@ -32,15 +32,14 @@ resource "aws_iam_account_password_policy" "this" {
 }
 
 # ---------- IAM account alias (opt-in) --------------------------------
-# When `manage_account_alias = true`, the import block adopts the
-# existing alias on first apply (the alias must already exist in
-# AWS). Subsequent applies are no-ops unless the value changes.
-
-import {
-  for_each = var.manage_account_alias ? toset([var.account_alias]) : toset([])
-  to       = aws_iam_account_alias.this[0]
-  id       = each.value
-}
+# When `manage_account_alias = true`, the alias resource is created. If
+# an alias already exists in the account, the create will fail — the
+# caller is expected to add an `import` block in their root module to
+# adopt the existing alias. See the README for the exact recipe.
+#
+# Import blocks can only live in the root module (OpenTofu language
+# rule), so this sub-module deliberately does not declare one — that
+# wouldn't compose when the module is consumed via `module "..." { ... }`.
 
 resource "aws_iam_account_alias" "this" {
   count = var.manage_account_alias ? 1 : 0

@@ -70,18 +70,55 @@ resource "aws_kms_grant" "asg_use_ebs_default" {
 
 ## Account alias adoption
 
-When `manage_account_alias = true`, the module's `import` block adopts
-the existing alias on first apply. **The alias must already exist in
-AWS** — if it doesn't, the import errors. Set it manually first:
+When `manage_account_alias = true`, this module declares the
+`aws_iam_account_alias` resource. If an alias already exists on the
+account (e.g. set manually as an aws-nuke prerequisite), the create
+will collide and the apply will fail unless you've imported it first.
+
+OpenTofu only allows `import` blocks in the **root** module, so this
+sub-module deliberately doesn't declare one — it would silently fail
+to compose the moment you consume the module via `module "..." { ... }`.
+Adopting an existing alias is therefore a caller-side concern: drop an
+`import` block in your own root, addressing the resource through the
+module:
+
+```hcl
+import {
+  to = module.account_hardening.aws_iam_account_alias.this[0]
+  id = "phpboyscout"
+}
+
+module "account_hardening" {
+  source = "github.com/phpboyscout/terraform-aws-security-baseline//modules/account-hardening?ref=v0.1.0"
+  # ...
+  manage_account_alias = true
+  account_alias        = "phpboyscout"
+}
+```
+
+If you're calling the **root** `terraform-aws-security-baseline` module
+(not the sub-module directly), the address adds another hop:
+
+```hcl
+import {
+  to = module.security_baseline.module.account_hardening[0].aws_iam_account_alias.this[0]
+  id = "phpboyscout"
+}
+```
+
+Set the alias manually first if it doesn't already exist:
 
 ```sh
 aws iam create-account-alias --account-alias <alias>
 ```
 
-Subsequent applies are no-ops unless the value changes. To stop
-managing the alias, set `manage_account_alias = false` — `tofu apply`
-will remove the resource from state but **not** delete the alias from
-AWS (no destroy implied; the alias persists).
+After the first successful apply, the import is satisfied and can be
+left in place (idempotent) or removed.
+
+To stop managing the alias, set `manage_account_alias = false` — the
+next apply removes the resource from state but does **not** delete the
+alias from AWS (the resource has no destroy semantics that would; the
+alias persists).
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
