@@ -1,7 +1,7 @@
 ---
 title: terraform-aws-security-baseline v0.1
 description: Master spec for the second public reusable module — account hardening, audit logging, AWS Config, threat detection, alerts, and the human operator role.
-status: approved
+status: implemented
 date: 2026-05-06
 authors: [Matt Cockayne]
 tags: [spec, master, security-baseline]
@@ -100,18 +100,19 @@ The following are valuable but explicitly NOT part of this module:
 
 ### D3 — Upstream building blocks
 
-Use `terraform-aws-modules/*` where they handle real complexity.
-Hand-roll where they're either thin wrappers around one resource or
-where their conventions get in the way:
+The original draft of this spec proposed pulling in
+`terraform-aws-modules/*` for three of the six sub-modules. During
+implementation each of those was reconsidered and v0.1 ended up
+hand-rolling all six. Reasons recorded per sub-module:
 
-| Sub-module | Built on | Why / why not |
+| Sub-module | Built on | Rationale |
 |---|---|---|
 | account-hardening | hand-roll | Trivial primitives (one resource each); upstream wraps would be more LOC, not less. |
-| audit-logging | `terraform-aws-modules/cloudtrail/aws` + hand-rolled bucket | The CloudTrail module handles the bucket policy edge cases (service principal access, log-file-validation requirements); we keep direct control of the bucket via `s3-bucket` so we can apply the same `prevent_destroy` + bucket-policy guardrails as the state bucket. |
-| aws-config | `terraform-aws-modules/config/aws` | Recorder + delivery channel + bucket policy is fiddly to get right; the upstream nails it. |
+| audit-logging | hand-roll | `terraform-aws-modules/cloudtrail` bundles its own bucket without `prevent_destroy` and with a slightly weaker bucket policy than the state bucket pattern we want to mirror. Hand-rolling adds ~50 lines and gives bit-for-bit identical posture to the bootstrap state bucket. See `modules/audit-logging/README.md § Why hand-rolled?`. |
+| aws-config | hand-roll | `terraform-aws-modules/config/aws` doesn't manage the history bucket — it expects you to pass an existing one. We'd be hand-rolling the bucket either way (matching audit-logging's posture); at that point the upstream module's value is ~30 lines of recorder + delivery-channel + role-policy boilerplate. Not worth the dependency. See `modules/aws-config/README.md § Why hand-rolled?`. |
 | threat-detection | hand-roll | `aws_guardduty_detector`, `aws_securityhub_account`, `aws_securityhub_standards_subscription`, `aws_accessanalyzer_analyzer` — one resource each, no benefit from wrapping. |
 | alerts | hand-roll | SNS + EventBridge rules + topic policy. Small surface, full control matters for the routing logic. |
-| operator-role | `terraform-aws-modules/iam//modules/iam-assumable-role` | Trust policy with MFA condition is exactly what that sub-module does. |
+| operator-role | hand-roll | `terraform-aws-modules/iam//modules/iam-assumable-role` covers the trust-policy-with-MFA shape but doesn't accommodate the region-restriction inline policy with `NotAction` carve-outs we need; we'd be reaching past its abstraction immediately. The whole sub-module is ~100 lines of HCL — direct resources are clearer. |
 
 We do **not** use Cloud Posse account-baseline, Gruntwork Reference
 Architecture, or AWS Control Tower for the same reasons documented
@@ -121,14 +122,25 @@ convention).
 ### D4 — Account alias
 
 The account alias is currently set manually as an aws-nuke
-prerequisite. `account-hardening` sub-module takes it over via an
-`import` block when `manage_account_alias = true` (default
-**false** — opt-in to avoid stomping on accounts that have set it
-some other way).
+prerequisite. The `account-hardening` sub-module declares the
+`aws_iam_account_alias` resource conditionally on
+`manage_account_alias = true` (default **false** — opt-in to avoid
+stomping on accounts that have set it some other way).
 
-When opted in, the module uses `aws_iam_account_alias` with an
-`import` block targeting the existing alias value. Subsequent
-applies are no-ops; the alias is now tofu-managed.
+**Adopting an existing alias is caller-side, not module-side.** The
+draft of this spec assumed an `import { ... }` block in the
+sub-module. During implementation that turned out to be unworkable:
+OpenTofu only allows `import` blocks in the **root** module, so
+declaring one inside `modules/account-hardening` makes the module
+fail to compose the moment any caller wraps it via
+`module "..." { ... }`. The import block was removed in
+[`fix(account-hardening)`][fix]; consumers that want to adopt an
+existing alias place the import block in their own root module.
+The `modules/account-hardening/README.md § Account alias adoption`
+section documents the recipe and addresses the resource through both
+the sub-module-direct path and the security-baseline-root path.
+
+[fix]: https://github.com/phpboyscout/terraform-aws-security-baseline/commit/20cf382
 
 ### D5 — Region restriction
 
@@ -220,15 +232,19 @@ Same conventions as bootstrap:
 |---|---|---|
 | `tags` | `map(string)` | `{}` |
 | `manage_account_alias` | `bool` | `false` (opt-in; see D4) |
-| `allowed_regions` | `list(string)` | `[var.region]` |
+| `account_alias` | `string` | `null` (required when `manage_account_alias = true`) |
+| `allowed_regions` | `list(string)` | `null` (resolves to `[var.region]` inside the operator-role sub-module) |
 | `enable_account_hardening` | `bool` | `true` |
 | `enable_audit_logging` | `bool` | `true` |
 | `enable_aws_config` | `bool` | `true` |
 | `enable_threat_detection` | `bool` | `true` |
 | `enable_alerts` | `bool` | `true` |
 | `enable_operator_role` | `bool` | `true` |
-| `securityhub_standards` | `set(string)` | `["AWS_FSBP", "CIS_v3"]` |
-| `audit_log_retention_days` | `number` | `730` |
+| `securityhub_standards` | `set(string)` | `["fsbp", "cis-v3"]` (short keys map to the full standards ARNs in `modules/threat-detection/main.tf`) |
+| `audit_retention_days` | `number` | `730` (applied to both the audit log bucket and the Config history bucket) |
+| `log_bucket_name` | `string` | `null` (resolves to `<project_name>-audit-logs-<account_id>`) |
+| `config_bucket_name` | `string` | `null` (resolves to `<project_name>-config-<account_id>`) |
+| `operator_role_name` | `string` | `"InfraAdmin"` |
 
 Each `enable_*` toggle gates a `count = var.enable_X ? 1 : 0` on the
 corresponding sub-module call so callers can compose the baseline
@@ -238,13 +254,22 @@ corresponding sub-module call so callers can compose the baseline
 
 | Name | Notes |
 |---|---|
-| `audit_log_bucket_arn` | CloudTrail bucket ARN. |
-| `audit_log_kms_key_arn` | CloudTrail log encryption CMK. |
+| `account_alias` | IAM account alias managed by the account-hardening sub-module. Null when account-hardening is disabled or `manage_account_alias = false`. |
+| `ebs_default_kms_key_arn` | CMK used as the EBS default-encryption key. Null when account-hardening is disabled. |
+| `audit_log_bucket_id` | Name of the S3 bucket holding CloudTrail logs. |
+| `audit_log_bucket_arn` | CloudTrail log bucket ARN. |
+| `audit_log_kms_key_arn` | CMK encrypting CloudTrail logs at rest. |
+| `audit_trail_arn` | ARN of the CloudTrail trail. |
+| `aws_config_bucket_id` | Name of the S3 bucket holding AWS Config history. |
 | `aws_config_bucket_arn` | Config history bucket ARN. |
-| `aws_config_kms_key_arn` | Config encryption CMK. |
-| `alerts_topic_arn` | SNS topic ARN — for downstream stacks that want to fan out their own alarms to the same topic. |
-| `operator_role_arn` | InfraAdmin role ARN. Humans assume this with MFA. |
+| `aws_config_kms_key_arn` | CMK encrypting Config history at rest. |
+| `aws_config_recorder_role_arn` | ARN of the IAM role Config assumes. |
 | `guardduty_detector_id` | For downstream tooling that consumes findings. |
+| `access_analyzer_arn` | ARN of the IAM Access Analyzer. |
+| `alerts_topic_arn` | SNS topic ARN — downstream stacks fan their own alarms in by attaching CloudWatch alarms / EventBridge targets to this ARN. |
+| `alerts_kms_key_arn` | CMK encrypting messages on the alerts topic. |
+| `operator_role_arn` | InfraAdmin role ARN. Humans assume this with MFA. |
+| `operator_role_name` | Name of the operator role. |
 
 ## Open questions
 
