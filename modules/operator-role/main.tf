@@ -60,6 +60,7 @@ resource "aws_iam_role" "this" {
 }
 
 resource "aws_iam_role_policy_attachment" "admin" {
+  # checkov:skip=CKV_AWS_274:AdministratorAccess is the deliberate purpose of this role — humans assume it with MFA to do anything administrative. Toggle off via attach_admin_policy = false to attach narrower policies.
   count = var.attach_admin_policy ? 1 : 0
 
   role       = aws_iam_role.this.name

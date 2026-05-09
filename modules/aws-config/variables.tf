@@ -8,11 +8,6 @@ variable "account_id" {
   }
 }
 
-variable "region" {
-  description = "Region the Config history bucket lives in and the recorder runs in."
-  type        = string
-}
-
 variable "config_bucket_name" {
   description = "S3 bucket name for the AWS Config history archive. Must be globally unique. Convention: `<project>-config-<account_id>`."
   type        = string

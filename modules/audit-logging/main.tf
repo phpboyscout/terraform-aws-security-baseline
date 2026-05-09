@@ -246,6 +246,8 @@ data "aws_iam_policy_document" "logs_bucket" {
 # ---------- The trail itself ------------------------------------------
 
 resource "aws_cloudtrail" "this" {
+  # checkov:skip=CKV_AWS_252:Findings fan into SNS via the alerts sub-module's EventBridge rules — wiring SNS directly to the trail would duplicate alerts.
+  # checkov:skip=CKV2_AWS_10:CloudWatch Logs integration deliberately omitted — S3 + EventBridge is sufficient for our use case and CloudWatch Logs adds per-event ingestion cost without additional signal at this scale.
   name                          = var.trail_name
   s3_bucket_name                = aws_s3_bucket.logs.id
   kms_key_id                    = aws_kms_key.logs.arn

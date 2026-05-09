@@ -72,6 +72,52 @@ multiple module deployments.
   for v0.1.
 
 <!-- BEGIN_TF_DOCS -->
-<!-- terraform-docs auto-injects the inputs/outputs/requirements
-     tables here on `just docs`. -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0, < 7.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0, < 7.0 |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_accessanalyzer_analyzer.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/accessanalyzer_analyzer) | resource |
+| [aws_guardduty_detector.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_detector) | resource |
+| [aws_securityhub_account.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_account) | resource |
+| [aws_securityhub_standards_subscription.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/securityhub_standards_subscription) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_access_analyzer_name"></a> [access\_analyzer\_name](#input\_access\_analyzer\_name) | Name of the analyzer. | `string` | `"default-account"` | no |
+| <a name="input_access_analyzer_type"></a> [access\_analyzer\_type](#input\_access\_analyzer\_type) | Scope of the analyzer. `ACCOUNT` analyses just this account; `ORGANIZATION` requires AWS Organizations and analyses all member accounts (out of scope for single-account v0.1 setups). | `string` | `"ACCOUNT"` | no |
+| <a name="input_enable_access_analyzer"></a> [enable\_access\_analyzer](#input\_enable\_access\_analyzer) | Whether to provision an IAM Access Analyzer. | `bool` | `true` | no |
+| <a name="input_enable_guardduty"></a> [enable\_guardduty](#input\_enable\_guardduty) | Whether to provision a GuardDuty detector in this region. | `bool` | `true` | no |
+| <a name="input_enable_securityhub"></a> [enable\_securityhub](#input\_enable\_securityhub) | Whether to enable Security Hub in this region. | `bool` | `true` | no |
+| <a name="input_guardduty_finding_publishing_frequency"></a> [guardduty\_finding\_publishing\_frequency](#input\_guardduty\_finding\_publishing\_frequency) | How often GuardDuty exports updated findings to EventBridge. One of `FIFTEEN_MINUTES`, `ONE_HOUR`, `SIX_HOURS`. Faster = more responsive alerting; cost is identical. | `string` | `"FIFTEEN_MINUTES"` | no |
+| <a name="input_region"></a> [region](#input\_region) | Region the detector / hub / analyzer run in. Used in Security Hub standards ARNs. | `string` | n/a | yes |
+| <a name="input_securityhub_control_finding_generator"></a> [securityhub\_control\_finding\_generator](#input\_securityhub\_control\_finding\_generator) | How Security Hub generates findings for controls. `SECURITY_CONTROL` (recommended; consolidated across standards) or `STANDARD_CONTROL` (legacy; one finding per standard per control). | `string` | `"SECURITY_CONTROL"` | no |
+| <a name="input_securityhub_enable_default_standards"></a> [securityhub\_enable\_default\_standards](#input\_securityhub\_enable\_default\_standards) | Whether to let AWS auto-subscribe Security Hub to its current set of default standards. Default false — we explicitly manage subscriptions via `securityhub_standards` so what's enabled is deterministic. | `bool` | `false` | no |
+| <a name="input_securityhub_standards"></a> [securityhub\_standards](#input\_securityhub\_standards) | Security Hub standards to subscribe to. Use the keys from the supported set: `fsbp` (AWS Foundational Security Best Practices), `cis-v3` (CIS AWS Foundations Benchmark v3.0), `cis-v1.4` (CIS v1.4 — deprecated, prefer v3), `pci-dss` (PCI DSS — workload-specific, opt-in only). | `set(string)` | <pre>[<br/>  "fsbp",<br/>  "cis-v3"<br/>]</pre> | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags applied to every taggable resource this module creates. Merged on top of the consuming provider's `default_tags` — module-supplied tags win on key conflict. | `map(string)` | `{}` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_access_analyzer_arn"></a> [access\_analyzer\_arn](#output\_access\_analyzer\_arn) | ARN of the IAM Access Analyzer. Null when `enable_access_analyzer = false`. |
+| <a name="output_access_analyzer_name"></a> [access\_analyzer\_name](#output\_access\_analyzer\_name) | Name of the analyzer. Null when `enable_access_analyzer = false`. |
+| <a name="output_guardduty_detector_arn"></a> [guardduty\_detector\_arn](#output\_guardduty\_detector\_arn) | ARN of the GuardDuty detector. Null when `enable_guardduty = false`. |
+| <a name="output_guardduty_detector_id"></a> [guardduty\_detector\_id](#output\_guardduty\_detector\_id) | ID of the GuardDuty detector. Null when `enable_guardduty = false`. |
+| <a name="output_securityhub_account_id"></a> [securityhub\_account\_id](#output\_securityhub\_account\_id) | Identifier of the enabled Security Hub account. Null when `enable_securityhub = false`. |
+| <a name="output_securityhub_subscribed_standards"></a> [securityhub\_subscribed\_standards](#output\_securityhub\_subscribed\_standards) | Map of subscribed standard key → standards subscription ARN. |
 <!-- END_TF_DOCS -->

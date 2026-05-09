@@ -22,6 +22,7 @@ locals {
 # ---------- GuardDuty -------------------------------------------------
 
 resource "aws_guardduty_detector" "this" {
+  # checkov:skip=CKV2_AWS_3:GuardDuty is enabled by default (var.enable_guardduty defaults to true) — checkov can't follow the count-based opt-out and flags the conditional as not enabled.
   count = var.enable_guardduty ? 1 : 0
 
   enable                       = true

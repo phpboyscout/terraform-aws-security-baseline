@@ -15,6 +15,11 @@ locals {
 # ---------- IAM password policy ---------------------------------------
 
 resource "aws_iam_account_password_policy" "this" {
+  # checkov:skip=CKV_AWS_9:max_password_age is set via var.password_policy (default 90); checkov can't follow optional() typed object defaults.
+  # checkov:skip=CKV_AWS_11:require_symbols is set via var.password_policy (default true); checkov can't follow optional() typed object defaults.
+  # checkov:skip=CKV_AWS_12:require_lowercase_characters is set via var.password_policy (default true); checkov can't follow optional() typed object defaults.
+  # checkov:skip=CKV_AWS_14:require_uppercase_characters is set via var.password_policy (default true); checkov can't follow optional() typed object defaults.
+  # checkov:skip=CKV_AWS_15:require_numbers is set via var.password_policy (default true); checkov can't follow optional() typed object defaults.
   minimum_password_length        = var.password_policy.minimum_password_length
   require_lowercase_characters   = var.password_policy.require_lowercase_characters
   require_uppercase_characters   = var.password_policy.require_uppercase_characters

@@ -8,11 +8,6 @@ variable "account_id" {
   }
 }
 
-variable "region" {
-  description = "Region the alerts SNS topic and EventBridge rules live in."
-  type        = string
-}
-
 variable "alerts_email" {
   description = "Email address subscribed to the alerts topic. AWS will send a confirmation email on first apply — the subscription is `PendingConfirmation` until clicked."
   type        = string
