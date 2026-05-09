@@ -36,7 +36,10 @@ module "account_hardening" {
     Repository = "phpboyscout/infra"
   }
 
-  # Take over the IAM account alias (existing value must match):
+  # Take over the IAM account alias (existing value must match).
+  # If an alias already exists in the account, your *root* module
+  # also needs an `import` block — see "Account alias adoption"
+  # below. Without it, the first apply fails with EntityAlreadyExists.
   manage_account_alias = true
   account_alias        = "phpboyscout"
 }

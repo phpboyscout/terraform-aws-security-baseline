@@ -74,9 +74,12 @@ caller.
   applies `var.tags`. See `docs/development/engineering-standards.md`.
 - **OpenTofu-first.** Tested with OpenTofu (`.opentofu-version`).
   Compatible with Terraform ≥ 1.10.
-- **Upstream modules used selectively** for narrow, factual concerns
-  (`terraform-aws-modules/cloudtrail`, `…/config`, `…/iam` for the
-  operator role). Hand-rolled where wrapping adds no value.
+- **Hand-rolled, not framework-wrapped.** All six sub-modules use
+  AWS resources directly rather than `terraform-aws-modules/*` /
+  Cloud Posse / Control Tower wraps. Each sub-module README has a
+  "Why hand-rolled?" section recording the trade-off (mostly:
+  upstream wraps either bundle assumptions we don't want, or are
+  thin enough that wrapping is more code, not less).
 - **No labels conventions.** No `context` input, no Atmos. Plain
   inputs, plain outputs.
 
