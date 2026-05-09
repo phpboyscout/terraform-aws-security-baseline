@@ -10,6 +10,8 @@ breaking changes to the module's public input/output surface.
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-05-09
+
 ### Added
 
 - Initial repository scaffolding: licence, README, CLAUDE.md, SECURITY
