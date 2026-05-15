@@ -81,20 +81,20 @@ so no additional grants needed.
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0, < 7.0 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0, < 7.0 |
 
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [aws_cloudwatch_event_rule.guardduty](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
 | [aws_cloudwatch_event_rule.root_api](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
 | [aws_cloudwatch_event_rule.root_login](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
@@ -112,7 +112,7 @@ so no additional grants needed.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | AWS account ID. Used in topic policy conditions and rule source-account scoping. | `string` | n/a | yes |
 | <a name="input_alerts_email"></a> [alerts\_email](#input\_alerts\_email) | Email address subscribed to the alerts topic. AWS will send a confirmation email on first apply — the subscription is `PendingConfirmation` until clicked. | `string` | n/a | yes |
 | <a name="input_enable_guardduty_finding_rule"></a> [enable\_guardduty\_finding\_rule](#input\_enable\_guardduty\_finding\_rule) | Whether to create an EventBridge rule forwarding GuardDuty findings of severity HIGH or CRITICAL (numeric ≥ 7) to the alerts topic. | `bool` | `true` | no |
@@ -128,7 +128,7 @@ so no additional grants needed.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_kms_alias_name"></a> [kms\_alias\_name](#output\_kms\_alias\_name) | Full alias of the SNS-encryption CMK (with `alias/` prefix). |
 | <a name="output_kms_key_arn"></a> [kms\_key\_arn](#output\_kms\_key\_arn) | ARN of the customer-managed CMK encrypting messages on the alerts topic. |
 | <a name="output_subscription_pending_confirmation"></a> [subscription\_pending\_confirmation](#output\_subscription\_pending\_confirmation) | Reminder that the email subscription requires manual confirmation by the recipient on first apply. Always true at apply time; AWS confirms out-of-band. |

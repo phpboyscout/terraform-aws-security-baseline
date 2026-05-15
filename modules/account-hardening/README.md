@@ -127,20 +127,20 @@ alias persists).
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0, < 7.0 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0, < 7.0 |
 
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [aws_ebs_default_kms_key.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ebs_default_kms_key) | resource |
 | [aws_ebs_encryption_by_default.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ebs_encryption_by_default) | resource |
 | [aws_iam_account_alias.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_account_alias) | resource |
@@ -152,7 +152,7 @@ alias persists).
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_account_alias"></a> [account\_alias](#input\_account\_alias) | The IAM account alias value to import and manage. Required when `manage_account_alias = true`; ignored otherwise. The alias must already exist in AWS — set it manually with `aws iam create-account-alias` before applying. | `string` | `null` | no |
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | AWS account ID. Used as the root principal in the EBS default-encryption KMS key policy. | `string` | n/a | yes |
 | <a name="input_ebs_kms_alias"></a> [ebs\_kms\_alias](#input\_ebs\_kms\_alias) | Alias for the EBS default-encryption CMK, without the `alias/` prefix. | `string` | `"ebs-default"` | no |
@@ -165,7 +165,7 @@ alias persists).
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_account_alias"></a> [account\_alias](#output\_account\_alias) | IAM account alias managed by this module. Null when `manage_account_alias = false`. |
 | <a name="output_ebs_default_kms_alias_name"></a> [ebs\_default\_kms\_alias\_name](#output\_ebs\_default\_kms\_alias\_name) | Full alias of the EBS default-encryption CMK (with `alias/` prefix). |
 | <a name="output_ebs_default_kms_key_arn"></a> [ebs\_default\_kms\_key\_arn](#output\_ebs\_default\_kms\_key\_arn) | ARN of the customer-managed CMK used as the EBS default-encryption key. |

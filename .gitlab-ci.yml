@@ -1,0 +1,45 @@
+# ---------------------------------------------------------------------------
+# phpboyscout/terraform-aws-security-baseline CI pipeline.
+#
+# Imports the four reusable components from phpboyscout/cicd.
+# Each component runs in registry.gitlab.com/phpboyscout/images/infra-tools
+# at the tag pinned by the component's image_version default (v0.2.0
+# as of cicd v0.1.1). Renovate keeps the @vX.Y.Z component refs
+# current as cicd cuts new releases.
+# ---------------------------------------------------------------------------
+
+stages:
+  - lint
+  - security
+  - test
+  - pages
+
+# ---------- lint: tofu fmt + tflint + terraform-docs drift -------------
+
+include:
+  - component: gitlab.com/phpboyscout/cicd/tofu-lint@v0.1.1
+    inputs:
+      stage: lint
+      # `.` runs `tofu fmt -recursive` from root and tflint per-path.
+      # terraform-docs iterates each entry: root + each sub-module + the
+      # example get their READMEs re-injected.
+      paths: ". modules/account-hardening modules/alerts modules/audit-logging modules/aws-config modules/operator-role modules/threat-detection examples/minimal"
+
+  - component: gitlab.com/phpboyscout/cicd/tofu-security@v0.1.1
+    inputs:
+      stage: security
+      # trivy / checkov walk the tree; gitleaks scans every tracked file.
+      paths: "."
+
+  - component: gitlab.com/phpboyscout/cicd/tofu-validate@v0.1.1
+    inputs:
+      stage: test
+      # Root + each sub-module + example. tofu-validate skips dirs
+      # without *.tf files automatically.
+      validate_paths: ". modules/account-hardening modules/alerts modules/audit-logging modules/aws-config modules/operator-role modules/threat-detection examples/minimal"
+
+  - component: gitlab.com/phpboyscout/cicd/zensical-pages@v0.1.1
+    inputs:
+      stage: pages
+      # Defaults match: zensical.toml + docs/ + requirements-lock.txt
+      # all at repo root; deploy_branch=main.

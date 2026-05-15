@@ -73,20 +73,20 @@ boilerplate. Not worth the dependency. Same logic as audit-logging.
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0, < 7.0 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0, < 7.0 |
 
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [aws_config_configuration_recorder.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/config_configuration_recorder) | resource |
 | [aws_config_configuration_recorder_status.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/config_configuration_recorder_status) | resource |
 | [aws_config_delivery_channel.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/config_delivery_channel) | resource |
@@ -105,7 +105,7 @@ boilerplate. Not worth the dependency. Same logic as audit-logging.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_abort_incomplete_multipart_upload_days"></a> [abort\_incomplete\_multipart\_upload\_days](#input\_abort\_incomplete\_multipart\_upload\_days) | Days after which incomplete multipart uploads to the history bucket are aborted. Closes CKV\_AWS\_300. | `number` | `7` | no |
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | AWS account ID. Used in service-principal source-ARN conditions on the Config history bucket policy. | `string` | n/a | yes |
 | <a name="input_config_bucket_name"></a> [config\_bucket\_name](#input\_config\_bucket\_name) | S3 bucket name for the AWS Config history archive. Must be globally unique. Convention: `<project>-config-<account_id>`. | `string` | n/a | yes |
@@ -123,7 +123,7 @@ boilerplate. Not worth the dependency. Same logic as audit-logging.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_config_bucket_arn"></a> [config\_bucket\_arn](#output\_config\_bucket\_arn) | ARN of the Config history bucket. |
 | <a name="output_config_bucket_id"></a> [config\_bucket\_id](#output\_config\_bucket\_id) | Name of the S3 bucket holding AWS Config history. |
 | <a name="output_config_kms_alias_name"></a> [config\_kms\_alias\_name](#output\_config\_kms\_alias\_name) | Full alias of the Config history-encryption CMK (with `alias/` prefix). |
