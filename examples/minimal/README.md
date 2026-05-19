@@ -74,3 +74,42 @@ module "security_baseline" {
 ```
 
 See `modules/account-hardening/README.md` for the rationale.
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+| ---- | ------- |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.10.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0, < 7.0 |
+
+## Providers
+
+No providers.
+
+## Resources
+
+No resources.
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+| ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_account_id"></a> [account\_id](#input\_account\_id) | AWS account ID. Replace the placeholder default before applying. | `string` | `"123456789012"` | no |
+| <a name="input_alerts_email"></a> [alerts\_email](#input\_alerts\_email) | Email address subscribed to the alerts SNS topic. Replace before applying — AWS will send a confirmation email to this address. | `string` | `"alerts@example.invalid"` | no |
+| <a name="input_project_name"></a> [project\_name](#input\_project\_name) | Project tag used to derive default resource names. | `string` | `"example"` | no |
+| <a name="input_region"></a> [region](#input\_region) | Primary region the example provisions into. | `string` | `"eu-west-2"` | no |
+
+## Outputs
+
+| Name | Description |
+| ---- | ----------- |
+| <a name="output_access_analyzer_arn"></a> [access\_analyzer\_arn](#output\_access\_analyzer\_arn) | ARN of the IAM Access Analyzer. |
+| <a name="output_alerts_topic_arn"></a> [alerts\_topic\_arn](#output\_alerts\_topic\_arn) | ARN of the security alerts SNS topic. Downstream stacks fan their own alarms in by attaching CloudWatch alarms or EventBridge targets to this ARN. |
+| <a name="output_audit_log_bucket_arn"></a> [audit\_log\_bucket\_arn](#output\_audit\_log\_bucket\_arn) | ARN of the audit log bucket. |
+| <a name="output_audit_trail_arn"></a> [audit\_trail\_arn](#output\_audit\_trail\_arn) | ARN of the CloudTrail trail. |
+| <a name="output_aws_config_bucket_arn"></a> [aws\_config\_bucket\_arn](#output\_aws\_config\_bucket\_arn) | ARN of the AWS Config history bucket. |
+| <a name="output_ebs_default_kms_key_arn"></a> [ebs\_default\_kms\_key\_arn](#output\_ebs\_default\_kms\_key\_arn) | ARN of the customer-managed CMK used as the EBS default-encryption key. |
+| <a name="output_guardduty_detector_id"></a> [guardduty\_detector\_id](#output\_guardduty\_detector\_id) | ID of the GuardDuty detector. |
+| <a name="output_operator_role_arn"></a> [operator\_role\_arn](#output\_operator\_role\_arn) | ARN of the operator role. Humans assume this with MFA via `aws sts assume-role`. |
+<!-- END_TF_DOCS -->

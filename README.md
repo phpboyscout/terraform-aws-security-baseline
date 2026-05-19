@@ -105,7 +105,7 @@ and design rationale — is at
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0, < 7.0 |
 
@@ -120,7 +120,7 @@ No resources.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_account_alias"></a> [account\_alias](#input\_account\_alias) | IAM account alias to import and manage. Required when `manage_account_alias = true`. | `string` | `null` | no |
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | AWS account ID this module operates against. Threaded through every sub-module that needs it for principal scoping. | `string` | n/a | yes |
 | <a name="input_alerts_email"></a> [alerts\_email](#input\_alerts\_email) | Email address subscribed to the alerts SNS topic. Required even when `enable_alerts = false` to keep the signature stable; ignored in that case. AWS will send a confirmation email on first apply. | `string` | n/a | yes |
@@ -144,7 +144,7 @@ No resources.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_access_analyzer_arn"></a> [access\_analyzer\_arn](#output\_access\_analyzer\_arn) | ARN of the IAM Access Analyzer. Null when threat-detection is disabled or analyzer is opted out. |
 | <a name="output_account_alias"></a> [account\_alias](#output\_account\_alias) | IAM account alias managed by the account-hardening sub-module. Null when account-hardening is disabled or `manage_account_alias = false`. |
 | <a name="output_alerts_kms_key_arn"></a> [alerts\_kms\_key\_arn](#output\_alerts\_kms\_key\_arn) | ARN of the customer-managed CMK encrypting messages on the alerts topic. |

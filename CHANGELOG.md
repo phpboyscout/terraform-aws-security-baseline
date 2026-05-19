@@ -10,6 +10,18 @@ breaking changes to the module's public input/output surface.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-05-19
+
+### Fixed
+
+- `alerts` sub-module — the SNS topic policy's `AllowAccountFullControl`
+  statement used `actions = ["sns:*"]`. An SNS topic *resource* policy
+  may contain only topic-scoped actions; `sns:*` pulls in account-level
+  actions (`sns:CreateTopic`, `sns:ListTopics`, …), so applying the
+  policy failed with `InvalidParameter: Policy statement action out of
+  service scope`. The statement now lists the eight topic-scoped
+  actions explicitly — the set AWS's own default topic policy grants.
+
 ## [0.1.0] - 2026-05-09
 
 ### Added

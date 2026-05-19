@@ -81,20 +81,20 @@ gives us bit-for-bit identical posture to the state bucket from
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0, < 7.0 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0, < 7.0 |
 
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [aws_cloudtrail.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudtrail) | resource |
 | [aws_kms_alias.logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
 | [aws_kms_key.logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
@@ -109,7 +109,7 @@ gives us bit-for-bit identical posture to the state bucket from
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_abort_incomplete_multipart_upload_days"></a> [abort\_incomplete\_multipart\_upload\_days](#input\_abort\_incomplete\_multipart\_upload\_days) | Days after which incomplete multipart uploads to the log bucket are aborted. Closes CKV\_AWS\_300. | `number` | `7` | no |
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | AWS account ID. Used in service-principal source-ARN conditions on the log bucket policy. | `string` | n/a | yes |
 | <a name="input_enable_log_file_validation"></a> [enable\_log\_file\_validation](#input\_enable\_log\_file\_validation) | Whether CloudTrail produces signed digests so log integrity can be verified after the fact. Recommended. | `bool` | `true` | no |
@@ -127,7 +127,7 @@ gives us bit-for-bit identical posture to the state bucket from
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_log_bucket_arn"></a> [log\_bucket\_arn](#output\_log\_bucket\_arn) | ARN of the log bucket. |
 | <a name="output_log_bucket_id"></a> [log\_bucket\_id](#output\_log\_bucket\_id) | Name of the S3 bucket holding CloudTrail logs. |
 | <a name="output_log_bucket_region"></a> [log\_bucket\_region](#output\_log\_bucket\_region) | Region the log bucket lives in. |

@@ -103,20 +103,20 @@ or SSO-driven setups, the trust principal would change:
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0, < 7.0 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0, < 7.0 |
 
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [aws_iam_role.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.region_restriction](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy_attachment.additional](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
@@ -125,7 +125,7 @@ or SSO-driven setups, the trust principal would change:
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | AWS account ID. Used as the trusted principal in the role's assume-role policy. | `string` | n/a | yes |
 | <a name="input_additional_policy_arns"></a> [additional\_policy\_arns](#input\_additional\_policy\_arns) | ARNs of additional managed policies to attach to the role. Useful for layering AWS-managed policies (e.g. ReadOnlyAccess, IAMFullAccess) on top of, or instead of, AdministratorAccess. | `set(string)` | `[]` | no |
 | <a name="input_allowed_regions"></a> [allowed\_regions](#input\_allowed\_regions) | Regions in which the operator role can operate. Null defaults to `[var.region]` (single-region restriction). Pass a wider list for multi-region setups, or an empty list `[]` to disable the restriction entirely. | `list(string)` | `null` | no |
@@ -141,7 +141,7 @@ or SSO-driven setups, the trust principal would change:
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_allowed_regions"></a> [allowed\_regions](#output\_allowed\_regions) | Regions in which this role can operate (region restriction). Empty list means no restriction is in effect. |
 | <a name="output_region_restriction_enabled"></a> [region\_restriction\_enabled](#output\_region\_restriction\_enabled) | Whether the region-restriction inline policy is attached. |
 | <a name="output_role_arn"></a> [role\_arn](#output\_role\_arn) | ARN of the operator role. Humans assume this with MFA via `aws sts assume-role` (or, more commonly, an SSO-style helper). |
