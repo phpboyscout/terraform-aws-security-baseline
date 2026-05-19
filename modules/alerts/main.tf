@@ -85,7 +85,10 @@ resource "aws_sns_topic_policy" "this" {
 data "aws_iam_policy_document" "topic" {
   # Account principals retain full control of the topic (default
   # behaviour without an explicit policy; we replicate it so adding
-  # other Allow statements doesn't strip it).
+  # other Allow statements doesn't strip it). Actions are listed
+  # explicitly, not as sns:* — an SNS topic resource policy rejects the
+  # account-scoped actions (sns:CreateTopic, sns:ListTopics, …) that
+  # sns:* pulls in, with "action out of service scope".
   statement {
     sid    = "AllowAccountFullControl"
     effect = "Allow"
@@ -93,7 +96,16 @@ data "aws_iam_policy_document" "topic" {
       type        = "AWS"
       identifiers = ["arn:aws:iam::${var.account_id}:root"]
     }
-    actions   = ["sns:*"]
+    actions = [
+      "sns:AddPermission",
+      "sns:DeleteTopic",
+      "sns:GetTopicAttributes",
+      "sns:ListSubscriptionsByTopic",
+      "sns:Publish",
+      "sns:RemovePermission",
+      "sns:SetTopicAttributes",
+      "sns:Subscribe",
+    ]
     resources = [aws_sns_topic.this.arn]
   }
 
