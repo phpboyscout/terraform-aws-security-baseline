@@ -49,6 +49,8 @@ module "threat_detection" {
   source = "./modules/threat-detection"
 
   region                = var.region
+  enable_guardduty      = var.enable_guardduty
+  enable_securityhub    = var.enable_securityhub
   securityhub_standards = var.securityhub_standards
 
   tags = var.tags

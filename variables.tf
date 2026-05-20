@@ -71,6 +71,18 @@ variable "enable_threat_detection" {
   default     = true
 }
 
+variable "enable_guardduty" {
+  description = "Within threat-detection, provision the GuardDuty detector. Defaults to true; set to false to skip just GuardDuty (Security Hub and Access Analyzer keep their defaults). Ignored when enable_threat_detection = false."
+  type        = bool
+  default     = true
+}
+
+variable "enable_securityhub" {
+  description = "Within threat-detection, enable Security Hub. Defaults to true; set to false to skip just Security Hub (GuardDuty and Access Analyzer keep their defaults). Ignored when enable_threat_detection = false."
+  type        = bool
+  default     = true
+}
+
 variable "enable_alerts" {
   description = "Whether to provision the alerts sub-module (SNS topic + email subscription + EventBridge rules)."
   type        = bool
