@@ -10,6 +10,19 @@ breaking changes to the module's public input/output surface.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-05-20
+
+### Added
+
+- Root inputs **`enable_guardduty`** and **`enable_securityhub`** (bool,
+  default `true`) — granular toggles passing through to the existing
+  `threat-detection` sub-module variables. Lets a consumer keep Access
+  Analyzer running while skipping GuardDuty or Security Hub
+  individually — for example while an AWS account's first-time service
+  activation is pending and `SubscriptionRequiredException` would
+  block the apply. Behaviour-preserving defaults; ignored when
+  `enable_threat_detection = false`.
+
 ## [0.1.1] - 2026-05-19
 
 ### Fixed
