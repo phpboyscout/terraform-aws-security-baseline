@@ -6,10 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `phpboyscout/terraform-aws-security-baseline` is a **reusable
 OpenTofu/Terraform module** that hardens an AWS account *post-bootstrap*.
-Sibling to [`terraform-aws-bootstrap`](https://github.com/phpboyscout/terraform-aws-bootstrap):
+Sibling to [`terraform-aws-bootstrap`](https://gitlab.com/phpboyscout/terraform-aws-bootstrap):
 that module produces the bare minimum needed for the next `tofu apply`
-(state backend, GitHub OIDC, automation role); this one runs second
-and brings the account up to "ready for workloads".
+(state backend, OIDC — GitHub or GitLab, selectable — automation
+role); this one runs second and brings the account up to "ready for
+workloads".
 
 Six sub-modules behind a thin root:
 
@@ -69,16 +70,16 @@ Same toolchain as the bootstrap module:
   prepend it.
 - **Task runner:** `justfile`.
 - **Pre-commit hooks** mirror the CI gate.
-- **CI** lives in `.github/workflows/`: `ci.yaml`, `security.yaml`,
-  `docs.yaml` (Zensical → Pages).
+- **CI** lives in `.gitlab-ci.yml`, consuming components from
+  `phpboyscout/cicd` (lint / security / validate / `zensical-pages`
+  for the docs site).
 
 ## Branch and commit workflow
 
 - Branch from `develop`. PR to `develop`. `develop → main` is the
   release PR.
-- Branch protection is **active** on both branches. Definitions in
-  `.github/rulesets/`; update with `./scripts/apply-branch-protection.sh
-  update`.
+- Branch protection is **active** on both branches, managed in the
+  GitLab project UI.
 
 ### Commit Conventions
 
