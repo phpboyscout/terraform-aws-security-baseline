@@ -43,3 +43,11 @@ include:
       stage: pages
       # Defaults match: zensical.toml + docs/ + requirements-lock.txt
       # all at repo root; deploy_branch=main.
+
+  # Publish to the GitLab Terraform Module Registry on each vX.Y.Z tag.
+  # Runs in .post via CI_JOB_TOKEN (own-project package write); consumers
+  # then reference gitlab.com/phpboyscout/security-baseline/aws + version.
+  - component: gitlab.com/phpboyscout/cicd/tofu-module-publish@v0.7.0
+    inputs:
+      module_name: security-baseline
+      # module_system defaults to "aws".
