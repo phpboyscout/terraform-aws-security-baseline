@@ -23,7 +23,8 @@ administrative; for multi-account or SSO-driven setups, see the
 
 ```hcl
 module "operator_role" {
-  source = "github.com/phpboyscout/terraform-aws-security-baseline//modules/operator-role?ref=v0.1.0"
+  source  = "gitlab.com/phpboyscout/security-baseline/aws//modules/operator-role"
+  version = "0.2.0"
 
   account_id = "049815585546"
   region     = "eu-west-2"

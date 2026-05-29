@@ -31,7 +31,8 @@ Each rule has a target wired to the SNS topic.
 
 ```hcl
 module "alerts" {
-  source = "github.com/phpboyscout/terraform-aws-security-baseline//modules/alerts?ref=v0.1.0"
+  source  = "gitlab.com/phpboyscout/security-baseline/aws//modules/alerts"
+  version = "0.2.0"
 
   account_id   = "049815585546"
   alerts_email = "aws@phpboyscout.uk"

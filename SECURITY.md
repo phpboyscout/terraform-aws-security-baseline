@@ -7,7 +7,7 @@ supported line is whatever appears as the latest tag on the `main` branch.
 
 ## Reporting a Vulnerability
 
-**Please do not open public GitHub issues for security problems.**
+**Please do not open public GitLab issues for security problems.**
 
 Report vulnerabilities by email to **security@phpboyscout.uk**. Include:
 

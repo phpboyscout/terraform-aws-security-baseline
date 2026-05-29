@@ -23,7 +23,8 @@ the sub-module can be used à la carte.
 
 ```hcl
 module "threat_detection" {
-  source = "github.com/phpboyscout/terraform-aws-security-baseline//modules/threat-detection?ref=v0.1.0"
+  source  = "gitlab.com/phpboyscout/security-baseline/aws//modules/threat-detection"
+  version = "0.2.0"
 
   region = "eu-west-2"
 

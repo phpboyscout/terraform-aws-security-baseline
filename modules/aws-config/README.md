@@ -25,7 +25,8 @@ CMK; bucket and KMS policies scoped to the Config service principal).
 
 ```hcl
 module "aws_config" {
-  source = "github.com/phpboyscout/terraform-aws-security-baseline//modules/aws-config?ref=v0.1.0"
+  source  = "gitlab.com/phpboyscout/security-baseline/aws//modules/aws-config"
+  version = "0.2.0"
 
   account_id         = "049815585546"
   config_bucket_name = "phpboyscout-config-049815585546"
