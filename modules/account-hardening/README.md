@@ -26,7 +26,8 @@ prerequisite.
 
 ```hcl
 module "account_hardening" {
-  source = "github.com/phpboyscout/terraform-aws-security-baseline//modules/account-hardening?ref=v0.1.0"
+  source  = "gitlab.com/phpboyscout/security-baseline/aws//modules/account-hardening"
+  version = "0.2.0"
 
   account_id = "049815585546"
 
@@ -92,7 +93,8 @@ import {
 }
 
 module "account_hardening" {
-  source = "github.com/phpboyscout/terraform-aws-security-baseline//modules/account-hardening?ref=v0.1.0"
+  source  = "gitlab.com/phpboyscout/security-baseline/aws//modules/account-hardening"
+  version = "0.2.0"
   # ...
   manage_account_alias = true
   account_alias        = "phpboyscout"

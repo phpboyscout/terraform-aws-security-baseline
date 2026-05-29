@@ -46,7 +46,8 @@ source:
 
 ```hcl
 module "security_baseline" {
-  source = "github.com/phpboyscout/terraform-aws-security-baseline?ref=v0.1.0"
+  source  = "gitlab.com/phpboyscout/security-baseline/aws"
+  version = "0.2.0"
   # ...
 }
 ```
@@ -66,7 +67,8 @@ import {
 }
 
 module "security_baseline" {
-  source = "github.com/phpboyscout/terraform-aws-security-baseline?ref=v0.1.0"
+  source  = "gitlab.com/phpboyscout/security-baseline/aws"
+  version = "0.2.0"
   # ...
   manage_account_alias = true
   account_alias        = "phpboyscout"

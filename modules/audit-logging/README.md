@@ -23,7 +23,8 @@ state bucket has.
 
 ```hcl
 module "audit_logging" {
-  source = "github.com/phpboyscout/terraform-aws-security-baseline//modules/audit-logging?ref=v0.1.0"
+  source  = "gitlab.com/phpboyscout/security-baseline/aws//modules/audit-logging"
+  version = "0.2.0"
 
   account_id      = "049815585546"
   region          = "eu-west-2"
