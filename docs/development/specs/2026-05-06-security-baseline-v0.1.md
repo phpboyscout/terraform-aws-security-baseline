@@ -140,7 +140,7 @@ The `modules/account-hardening/README.md § Account alias adoption`
 section documents the recipe and addresses the resource through both
 the sub-module-direct path and the security-baseline-root path.
 
-[fix]: https://github.com/phpboyscout/terraform-aws-security-baseline/commit/20cf382
+[fix]: https://gitlab.com/phpboyscout/terraform-aws-security-baseline/-/commit/20cf382
 
 ### D5 — Region restriction
 

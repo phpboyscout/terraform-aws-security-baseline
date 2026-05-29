@@ -3,10 +3,11 @@
 # settings.
 #
 # `source = "../../"` references the root module directly so this
-# example can be validated in CI without resolving the GitHub source.
+# example can be validated in CI without resolving the remote registry source.
 # Real callers would write:
 #
-#   source = "github.com/phpboyscout/terraform-aws-security-baseline?ref=v0.1.0"
+#   source  = "gitlab.com/phpboyscout/security-baseline/aws"
+#   version = "0.2.0"
 
 module "security_baseline" {
   source = "../../"

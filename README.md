@@ -5,7 +5,7 @@
 Opinionated AWS security baseline for [OpenTofu](https://opentofu.org/) /
 Terraform. Hardens an AWS account *post-bootstrap*: account-level hygiene,
 audit logging, AWS Config, threat detection, alerts, and an MFA-required
-human operator role. Sibling to [`terraform-aws-bootstrap`](https://github.com/phpboyscout/terraform-aws-bootstrap),
+human operator role. Sibling to [`terraform-aws-bootstrap`](https://gitlab.com/phpboyscout/terraform-aws-bootstrap),
 which prepares the bare minimum needed for the *next* `tofu apply`.
 
 ## What's in scope
@@ -37,7 +37,7 @@ where GuardDuty cost isn't yet warranted).
 ## What's deliberately NOT in scope
 
 Bootstrap (state backend, OIDC, automation role) — that's
-[`terraform-aws-bootstrap`](https://github.com/phpboyscout/terraform-aws-bootstrap).
+[`terraform-aws-bootstrap`](https://gitlab.com/phpboyscout/terraform-aws-bootstrap).
 Workload-specific resources — each gets its own consumer-side stack.
 Multi-account Organizations setup, IAM Identity Center / SSO, WAF,
 Inspector v2, Macie, Detective — see the master spec for the full
@@ -47,7 +47,8 @@ out-of-scope list and rationale.
 
 ```hcl
 module "security_baseline" {
-  source = "github.com/phpboyscout/terraform-aws-security-baseline?ref=v0.1.0"
+  source  = "gitlab.com/phpboyscout/security-baseline/aws"
+  version = "0.2.0"
 
   account_id   = "049815585546"
   region       = "eu-west-2"

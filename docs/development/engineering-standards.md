@@ -10,7 +10,7 @@ authors: [Matt Cockayne]
 
 Standing rules for every contribution to this module. Deviations need
 a spec entry justifying why. Same conventions as
-[`phpboyscout/terraform-aws-bootstrap`](https://github.com/phpboyscout/terraform-aws-bootstrap)
+[`phpboyscout/terraform-aws-bootstrap`](https://gitlab.com/phpboyscout/terraform-aws-bootstrap)
 — if you're cross-referencing across the two repos, anything here is
 load-bearing for both.
 

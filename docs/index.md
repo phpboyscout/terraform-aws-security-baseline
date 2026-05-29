@@ -36,7 +36,7 @@ callers can compose à la carte.
 
 ## Start here
 
-- **[Quick start](https://github.com/phpboyscout/terraform-aws-security-baseline#quick-start)** —
+- **[Quick start](https://gitlab.com/phpboyscout/terraform-aws-security-baseline#quick-start)** —
   one-call usage in the README.
 - **[Master spec](development/specs/2026-05-06-security-baseline-v0.1.md)** —
   scope decisions, sub-module breakdown, rejected alternatives,
@@ -49,8 +49,8 @@ callers can compose à la carte.
 
 - **[`phpboyscout/terraform-aws-bootstrap`][bootstrap]** — the
   pre-baseline module.
-- **[`phpboyscout/infra`](https://github.com/phpboyscout/infra)** —
+- **[`phpboyscout/infra`](https://gitlab.com/phpboyscout/infra)** —
   the first user of both modules; private, defines the AWS account
   that supports `go-tool-base` and `rust-tool-base`.
 
-[bootstrap]: https://github.com/phpboyscout/terraform-aws-bootstrap
+[bootstrap]: https://gitlab.com/phpboyscout/terraform-aws-bootstrap
