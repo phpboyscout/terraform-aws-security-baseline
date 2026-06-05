@@ -76,10 +76,18 @@ Same toolchain as the bootstrap module:
 
 ## Branch and commit workflow
 
-- Branch from `develop`. PR to `develop`. `develop → main` is the
-  release PR.
-- Branch protection is **active** on both branches, managed in the
-  GitLab project UI.
+`terraform-aws-security-baseline` is **trunk-based**: branch from
+`main`, MR to `main`. There is no `develop` branch.
+
+- Releases are cut by **`releaser-pleaser`** — it maintains a Release
+  MR on `main`; merging that MR publishes a `vX.Y.Z` tag whose
+  pipeline runs `tofu-module-publish` against the GitLab Module
+  Registry. Merging the Release MR is the human gate for a publish.
+- Branch protection is **active** on `main` — managed in the GitLab
+  project UI.
+- `RELEASER_PLEASER_TOKEN` (group-level CI variable) must be a PAT
+  with `api` + `write_repository` — **not** `CI_JOB_TOKEN`, which
+  can't open MRs.
 
 ### Commit Conventions
 
