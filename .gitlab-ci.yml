@@ -12,11 +12,40 @@ stages:
   - lint
   - security
   - test
+  - release
   - pages
+
+# Pipeline-source gating: MR pipelines are primary; tag pipelines run
+# the publish fan-out; main pipelines exist only so releaser-pleaser
+# can maintain its MR. The `never` rule suppresses duplicate branch
+# pipelines when a feature branch already has an open MR.
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"'
+      when: never
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+
+variables:
+  # releaser-pleaser walks the full commit log to compute the next
+  # Release MR + changelog.
+  GIT_DEPTH: "0"
 
 # ---------- lint: tofu fmt + tflint + terraform-docs drift -------------
 
 include:
+  # Release MR machinery — opens / updates the Release MR on every push
+  # to main; merging it cuts a vX.Y.Z tag whose pipeline fires the
+  # tofu-module-publish job (further below).
+  - component: $CI_SERVER_FQDN/apricote/releaser-pleaser/run@v0.8.0
+    inputs:
+      branch: main
+      stage: release
+      token: $RELEASER_PLEASER_TOKEN
+
+
   - component: gitlab.com/phpboyscout/cicd/tofu-lint@v0.7.2
     inputs:
       stage: lint
