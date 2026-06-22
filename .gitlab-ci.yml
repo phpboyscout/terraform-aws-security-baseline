@@ -39,14 +39,14 @@ include:
   # Release MR machinery — opens / updates the Release MR on every push
   # to main; merging it cuts a vX.Y.Z tag whose pipeline fires the
   # tofu-module-publish job (further below).
-  - component: gitlab.com/phpboyscout/cicd/releaser-pleaser@v0.11.4
+  - component: gitlab.com/phpboyscout/cicd/releaser-pleaser@v0.12.0
     inputs:
       branch: main
       stage: release
       token: $RELEASER_PLEASER_TOKEN
 
 
-  - component: gitlab.com/phpboyscout/cicd/tofu-lint@v0.11.4
+  - component: gitlab.com/phpboyscout/cicd/tofu-lint@v0.12.0
     inputs:
       stage: lint
       # `.` runs `tofu fmt -recursive` from root and tflint per-path.
@@ -54,20 +54,20 @@ include:
       # example get their READMEs re-injected.
       paths: ". modules/account-hardening modules/alerts modules/audit-logging modules/aws-config modules/operator-role modules/threat-detection examples/minimal"
 
-  - component: gitlab.com/phpboyscout/cicd/tofu-security@v0.11.4
+  - component: gitlab.com/phpboyscout/cicd/tofu-security@v0.12.0
     inputs:
       stage: security
       # trivy / checkov walk the tree; gitleaks scans every tracked file.
       paths: "."
 
-  - component: gitlab.com/phpboyscout/cicd/tofu-validate@v0.11.4
+  - component: gitlab.com/phpboyscout/cicd/tofu-validate@v0.12.0
     inputs:
       stage: test
       # Root + each sub-module + example. tofu-validate skips dirs
       # without *.tf files automatically.
       validate_paths: ". modules/account-hardening modules/alerts modules/audit-logging modules/aws-config modules/operator-role modules/threat-detection examples/minimal"
 
-  - component: gitlab.com/phpboyscout/cicd/zensical-pages@v0.11.4
+  - component: gitlab.com/phpboyscout/cicd/zensical-pages@v0.12.0
     inputs:
       stage: pages
       # Defaults match: zensical.toml + docs/ + requirements-lock.txt
@@ -76,7 +76,7 @@ include:
   # Publish to the GitLab Terraform Module Registry on each vX.Y.Z tag.
   # Runs in .post via CI_JOB_TOKEN (own-project package write); consumers
   # then reference gitlab.com/phpboyscout/security-baseline/aws + version.
-  - component: gitlab.com/phpboyscout/cicd/tofu-module-publish@v0.11.4
+  - component: gitlab.com/phpboyscout/cicd/tofu-module-publish@v0.12.0
     inputs:
       module_name: security-baseline
       # module_system defaults to "aws".
