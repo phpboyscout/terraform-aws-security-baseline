@@ -14,6 +14,7 @@ stages:
   - test
   - release
   - pages
+  - renovate
 
 # Pipeline-source gating: MR pipelines are primary; tag pipelines run
 # the publish fan-out; main pipelines exist only so releaser-pleaser
@@ -80,3 +81,13 @@ include:
     inputs:
       module_name: security-baseline
       # module_system defaults to "aws".
+
+  # Nightly Renovate scan (schedule-gated on $RENOVATE_TASK=scan). Keeps
+  # both the code dependencies and the pinned phpboyscout/cicd component
+  # refs current, via the cicd preset extended in renovate.json. Runs only
+  # on the renovate-daily pipeline schedule; the other jobs self-exclude
+  # from schedule pipelines.
+  - component: gitlab.com/phpboyscout/cicd/renovate-self@v0.21.1
+    inputs:
+      stage: renovate
+      repositories: "phpboyscout/terraform-aws-security-baseline"
