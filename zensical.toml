@@ -2,7 +2,7 @@
 site_name = "terraform-aws-security-baseline"
 site_description = "Opinionated AWS security baseline for OpenTofu — account hardening, audit logging, AWS Config, threat detection, alerts, and an MFA-required operator role."
 site_author = "Matt Cockayne"
-site_url = "https://aws-security-baseline.phpboyscout.uk"
+site_url = "https://aws-security-baseline.iac.phpboyscout.uk"
 copyright = """
 Copyright &copy; 2026 Matt Cockayne
 """
