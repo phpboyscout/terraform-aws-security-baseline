@@ -68,7 +68,7 @@ include:
       # without *.tf files automatically.
       validate_paths: ". modules/account-hardening modules/alerts modules/audit-logging modules/aws-config modules/operator-role modules/threat-detection examples/minimal"
 
-  - component: gitlab.com/phpboyscout/cicd/zensical-pages@v0.12.0
+  - component: gitlab.com/phpboyscout/cicd/zensical-pages@v0.23.0
     inputs:
       stage: pages
       # Defaults match: zensical.toml + docs/ + requirements-lock.txt
