@@ -17,10 +17,10 @@ jobs:
     name: tofu fmt
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.3.1
         with:
           persist-credentials: false
-      - uses: opentofu/setup-opentofu@v1
+      - uses: opentofu/setup-opentofu@v1.0.8
         with:
           tofu_wrapper: false
       - run: tofu fmt -recursive -check -diff .
@@ -29,10 +29,10 @@ jobs:
     name: tofu validate
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.3.1
         with:
           persist-credentials: false
-      - uses: opentofu/setup-opentofu@v1
+      - uses: opentofu/setup-opentofu@v1.0.8
         with:
           tofu_wrapper: false
       - name: Validate root, modules, and examples
@@ -54,10 +54,10 @@ jobs:
     name: tflint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.3.1
         with:
           persist-credentials: false
-      - uses: terraform-linters/setup-tflint@v4
+      - uses: terraform-linters/setup-tflint@v4.1.1
       - run: tflint --init
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -67,7 +67,7 @@ jobs:
     name: trivy config
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.3.1
         with:
           persist-credentials: false
       - uses: aquasecurity/trivy-action@master
@@ -81,7 +81,7 @@ jobs:
     name: checkov
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.3.1
         with:
           persist-credentials: false
       - uses: bridgecrewio/checkov-action@master
@@ -94,11 +94,11 @@ jobs:
     name: gitleaks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.3.1
         with:
           persist-credentials: false
           fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
+      - uses: gitleaks/gitleaks-action@v2.3.9
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -106,10 +106,10 @@ jobs:
     name: terraform-docs drift
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.3.1
         with:
           persist-credentials: false
-      - uses: terraform-docs/gh-actions@v1
+      - uses: terraform-docs/gh-actions@v1.4.1
         with:
           working-dir: .
           recursive: true
