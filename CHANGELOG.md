@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.2.1](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/releases/v0.2.1)
+
+[Compare to previous version](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/compare/v0.2.0...v0.2.1)
+
+### Bug Fixes
+
+- guard workflow dedup rule so release tag pipelines fire ([600588e](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/commit/600588e729d337d474bfab1fee4f7f5f38c89d74))
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
