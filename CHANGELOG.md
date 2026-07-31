@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.2.2](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/releases/v0.2.2)
+
+[Compare to previous version](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/compare/v0.2.1...v0.2.2)
+
+### Bug Fixes
+
+- **ci**: publish on tag from a real stage, not .post ([1f9191d](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/commit/1f9191d848189a65eb9099ca6de38ec677afde8f))
+
 ## [v0.2.1](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/releases/v0.2.1)
 
 [Compare to previous version](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/compare/v0.2.0...v0.2.1)
