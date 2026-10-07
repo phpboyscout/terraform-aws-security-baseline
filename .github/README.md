@@ -18,7 +18,7 @@ from there rather than from a git source:
 ```hcl
 module "security_baseline" {
   source  = "gitlab.com/phpboyscout/security-baseline/aws"
-  version = "0.2.0"
+  version = "0.2.2"
 }
 ```
 

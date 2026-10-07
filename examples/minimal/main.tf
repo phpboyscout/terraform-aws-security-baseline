@@ -7,7 +7,7 @@
 # Real callers would write:
 #
 #   source  = "gitlab.com/phpboyscout/security-baseline/aws"
-#   version = "0.2.0"
+#   version = "0.2.2"
 
 module "security_baseline" {
   source = "../../"

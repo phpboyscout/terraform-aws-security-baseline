@@ -13,8 +13,8 @@ hide:
 A reusable OpenTofu/Terraform module that hardens an AWS account
 *post-bootstrap*. Sibling to
 [`terraform-aws-bootstrap`][bootstrap]: that module produces the bare
-minimum needed for the next `tofu apply` (state backend, GitHub OIDC,
-automation role); this one runs second and brings the account up to
+minimum needed for the next `tofu apply` (state backend, CI OIDC for
+GitHub Actions or GitLab CI, automation role); this one runs second and brings the account up to
 "ready for workloads".
 
 Six sub-modules, no framework, no labels conventions:
@@ -36,7 +36,7 @@ callers can compose à la carte.
 
 ## Start here
 
-- **[Quick start](https://gitlab.com/phpboyscout/terraform-aws-security-baseline#quick-start)** —
+- **[Quick start](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline#quick-start)** —
   one-call usage in the README.
 - **[Master spec](development/specs/2026-05-06-security-baseline-v0.1.md)** —
   scope decisions, sub-module breakdown, rejected alternatives,
@@ -53,7 +53,7 @@ callers can compose à la carte.
   the first user of both modules; private, defines the AWS account
   that supports `go-tool-base` and `rust-tool-base`.
 
-[bootstrap]: https://gitlab.com/phpboyscout/terraform-aws-bootstrap
+[bootstrap]: https://gitlab.com/phpboyscout/iac/terraform-aws-bootstrap
 
 ## Further reading
 

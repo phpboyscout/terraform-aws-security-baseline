@@ -5,7 +5,7 @@
 Opinionated AWS security baseline for [OpenTofu](https://opentofu.org/) /
 Terraform. Hardens an AWS account *post-bootstrap*: account-level hygiene,
 audit logging, AWS Config, threat detection, alerts, and an MFA-required
-human operator role. Sibling to [`terraform-aws-bootstrap`](https://gitlab.com/phpboyscout/terraform-aws-bootstrap),
+human operator role. Sibling to [`terraform-aws-bootstrap`](https://gitlab.com/phpboyscout/iac/terraform-aws-bootstrap),
 which prepares the bare minimum needed for the *next* `tofu apply`.
 
 ## What's in scope
@@ -37,7 +37,7 @@ where GuardDuty cost isn't yet warranted).
 ## What's deliberately NOT in scope
 
 Bootstrap (state backend, OIDC, automation role) — that's
-[`terraform-aws-bootstrap`](https://gitlab.com/phpboyscout/terraform-aws-bootstrap).
+[`terraform-aws-bootstrap`](https://gitlab.com/phpboyscout/iac/terraform-aws-bootstrap).
 Workload-specific resources — each gets its own consumer-side stack.
 Multi-account Organizations setup, IAM Identity Center / SSO, WAF,
 Inspector v2, Macie, Detective — see the master spec for the full
@@ -48,7 +48,7 @@ out-of-scope list and rationale.
 ```hcl
 module "security_baseline" {
   source  = "gitlab.com/phpboyscout/security-baseline/aws"
-  version = "0.2.0"
+  version = "0.2.2"
 
   account_id   = "049815585546"
   region       = "eu-west-2"
@@ -74,11 +74,14 @@ caller.
 - **Tags propagated everywhere.** Every taggable resource accepts and
   applies `var.tags`. See `docs/development/engineering-standards.md`.
 - **OpenTofu-first.** Tested with OpenTofu (`.opentofu-version`).
-  Compatible with Terraform ≥ 1.10.
+  It also validates under Terraform: the module declares
+  `required_version = ">= 1.5.0"`, and `examples/minimal` asks for 1.10 or
+  later.
 - **Hand-rolled, not framework-wrapped.** All six sub-modules use
   AWS resources directly rather than `terraform-aws-modules/*` /
-  Cloud Posse / Control Tower wraps. Each sub-module README has a
-  "Why hand-rolled?" section recording the trade-off (mostly:
+  Cloud Posse / Control Tower wraps. The `audit-logging` and
+  `aws-config` READMEs record the trade-off in a "Why hand-rolled?"
+  section (mostly:
   upstream wraps either bundle assumptions we don't want, or are
   thin enough that wrapping is more code, not less).
 - **No labels conventions.** No `context` input, no Atmos. Plain
@@ -86,17 +89,18 @@ caller.
 
 ## Documentation
 
-The full microsite — including the master spec, per-sub-module specs,
-and design rationale — is at
-[phpboyscout.uk/terraform-aws-security-baseline/](https://phpboyscout.uk/terraform-aws-security-baseline/)
-(once the first release is tagged).
+The microsite, including the master spec and the engineering standards, is
+at [aws-security-baseline.iac.phpboyscout.uk](https://aws-security-baseline.iac.phpboyscout.uk).
 
 ## Roadmap
 
-- **v0.1** — AWS only, six sub-modules described above.
-- **v0.2** — Multi-region GuardDuty (deferred from v0.1 per the master
-  spec's open-questions resolution).
-- **Future** — sibling repos `terraform-gcp-security-baseline` and
+- **v0.1**: AWS only, the six sub-modules described above.
+- **v0.2**: granular `enable_guardduty` and `enable_securityhub` toggles
+  within threat detection.
+- **Not yet**: multi-region GuardDuty. The master spec deferred it from
+  v0.1, and v0.2 did not add it; the detector still runs in the primary
+  region only.
+- **Future**: sibling repos `terraform-gcp-security-baseline` and
   `terraform-azure-security-baseline` with the same shape so callers
   can swap providers cleanly.
 
@@ -166,6 +170,6 @@ No resources.
 | <a name="output_operator_role_name"></a> [operator\_role\_name](#output\_operator\_role\_name) | Name of the operator role. |
 <!-- END_TF_DOCS -->
 
-## License
+## Licence
 
-MIT — see [LICENSE](./LICENSE).
+MIT. See [LICENSE](./LICENSE).

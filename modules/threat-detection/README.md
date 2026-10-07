@@ -51,14 +51,14 @@ the new entry there.
 
 ## Multi-region note
 
-In v0.1, this module is designed to run in the **primary region only**.
+This module is designed to run in the **primary region only**.
 For multi-region threat detection, deploy the module to each region
 with `enable_access_analyzer = false` on non-primary regions (the
 analyzer is per-region; running it everywhere is rarely worthwhile).
 
-GuardDuty multi-region detector replication is a v0.2 expansion —
-when added, it will go in this sub-module rather than requiring
-multiple module deployments.
+GuardDuty multi-region detector replication is still deferred: v0.2
+did not add it. When it lands, it will go in this sub-module rather
+than requiring multiple module deployments.
 
 ## Cost notes
 
