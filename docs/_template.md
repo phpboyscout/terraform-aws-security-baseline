@@ -19,6 +19,6 @@ tags: []
 
 # <page title>
 
-<short intro paragraph — what this page is, who it's for>
+<short intro paragraph: what this page is, who it is for>
 
 ## <first section>

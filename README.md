@@ -12,21 +12,21 @@ which prepares the bare minimum needed for the *next* `tofu apply`.
 
 Six sub-modules behind a thin root:
 
-1. **`account-hardening`** — IAM password policy, S3 account-wide
+1. **`account-hardening`**: IAM password policy, S3 account-wide
    public-access block, EBS default encryption + customer-managed CMK.
    Optional IAM account alias adoption (off by default).
-2. **`audit-logging`** — multi-region CloudTrail with log-file
+2. **`audit-logging`**: multi-region CloudTrail with log-file
    validation; KMS-encrypted log bucket with `prevent_destroy`,
    TLS-only / SSE-KMS-only bucket policy.
-3. **`aws-config`** — Config recorder + delivery channel + history
+3. **`aws-config`**: Config recorder + delivery channel + history
    bucket. Records every supported resource type by default.
-4. **`threat-detection`** — GuardDuty detector (primary region in
+4. **`threat-detection`**: GuardDuty detector (primary region in
    v0.1), Security Hub with FSBP + CIS v3.0 standards, IAM Access
    Analyzer.
-5. **`alerts`** — SNS topic + email subscription + EventBridge rules
+5. **`alerts`**: SNS topic + email subscription + EventBridge rules
    for HIGH/CRITICAL GuardDuty + Security Hub findings, plus root
    login + root API usage alarms.
-6. **`operator-role`** — `InfraAdmin` role with MFA-required trust
+6. **`operator-role`**: `InfraAdmin` role with MFA-required trust
    policy and a configurable region-restriction inline policy
    (default: primary region only, with carve-outs for global services).
 
@@ -36,11 +36,11 @@ where GuardDuty cost isn't yet warranted).
 
 ## What's deliberately NOT in scope
 
-Bootstrap (state backend, OIDC, automation role) — that's
+Bootstrap (state backend, OIDC, automation role) belongs to
 [`terraform-aws-bootstrap`](https://gitlab.com/phpboyscout/iac/terraform-aws-bootstrap).
-Workload-specific resources — each gets its own consumer-side stack.
+Workload-specific resources each get their own consumer-side stack.
 Multi-account Organizations setup, IAM Identity Center / SSO, WAF,
-Inspector v2, Macie, Detective — see the master spec for the full
+Inspector v2, Macie and Detective are out too. The master spec has the full
 out-of-scope list and rationale.
 
 ## Quick start

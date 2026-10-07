@@ -10,18 +10,18 @@ authors: [Matt Cockayne]
 
 Standing rules for every contribution to this module. Deviations need
 a spec entry justifying why. Same conventions as
-[`phpboyscout/terraform-aws-bootstrap`](https://gitlab.com/phpboyscout/terraform-aws-bootstrap)
-— if you're cross-referencing across the two repos, anything here is
+[`phpboyscout/terraform-aws-bootstrap`](https://gitlab.com/phpboyscout/iac/terraform-aws-bootstrap),
+so if you're cross-referencing across the two repos, anything here is
 load-bearing for both.
 
-## 1. Tagging — non-negotiable
+## 1. Tagging is non-negotiable
 
 **Every taggable resource accepts and propagates `var.tags`.** Two-layer
 pattern:
 
-1. **Provider-level `default_tags`** (set by the *caller*) —
+1. **Provider-level `default_tags`** (set by the *caller*):
    cross-cutting tags like `Project`, `ManagedBy`, `Repository`.
-2. **Module-level `var.tags`** — exposed by every module, threaded
+2. **Module-level `var.tags`**, exposed by every module, threaded
    through every taggable resource via `merge(var.tags, { … })` for
    any per-resource additions. Module-supplied tags win on key
    conflict.
@@ -62,7 +62,7 @@ its own constraints.
 - **TLS-only bucket policies.** Audit and Config buckets refuse
   non-TLS access at the policy level.
 - **`prevent_destroy` on irreversible resources.** Audit log bucket
-  and Config history bucket — losing those is painful in incident
+  and Config history bucket, because losing those is painful in incident
   response.
 - **Region restriction by default.** The operator role denies
   actions outside the caller's `var.allowed_regions` (default
@@ -94,13 +94,13 @@ its own constraints.
 
 ## 5. File organisation within a module
 
-- `main.tf` — resource definitions.
-- `variables.tf` — typed, described inputs.
-- `outputs.tf` — described outputs.
-- `versions.tf` — `required_version` + `required_providers`.
-- `locals.tf` — shared locals (optional).
-- `data.tf` — data sources (optional).
-- `README.md` — usage example + auto-generated inputs/outputs table
+- `main.tf`: resource definitions.
+- `variables.tf`: typed, described inputs.
+- `outputs.tf`: described outputs.
+- `versions.tf`: `required_version` + `required_providers`.
+- `locals.tf`: shared locals (optional).
+- `data.tf`: data sources (optional).
+- `README.md`: usage example + auto-generated inputs/outputs table
   from terraform-docs.
 
 Larger modules may split `main.tf` by concern (`main.policy.tf`,
