@@ -26,7 +26,7 @@ module "operator_role" {
   source  = "gitlab.com/phpboyscout/security-baseline/aws//modules/operator-role"
   version = "0.2.0"
 
-  account_id = "049815585546"
+  account_id = "111122223333"
   region     = "eu-west-2"
 
   tags = {
@@ -44,7 +44,7 @@ assumes the role with MFA:
 aws sts assume-role \
   --role-arn "$(tofu output -raw operator_role_arn)" \
   --role-session-name matt \
-  --serial-number arn:aws:iam::049815585546:mfa/matt \
+  --serial-number arn:aws:iam::111122223333:mfa/matt \
   --token-code 123456
 ```
 

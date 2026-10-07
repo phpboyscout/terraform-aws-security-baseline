@@ -11,7 +11,7 @@ inputs:
 ```sh
 tofu init
 tofu plan \
-  -var 'account_id=049815585546' \
+  -var 'account_id=111122223333' \
   -var 'region=eu-west-2' \
   -var 'project_name=phpboyscout' \
   -var 'alerts_email=aws@phpboyscout.uk'

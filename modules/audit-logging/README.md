@@ -26,9 +26,9 @@ module "audit_logging" {
   source  = "gitlab.com/phpboyscout/security-baseline/aws//modules/audit-logging"
   version = "0.2.0"
 
-  account_id      = "049815585546"
+  account_id      = "111122223333"
   region          = "eu-west-2"
-  log_bucket_name = "phpboyscout-audit-logs-049815585546"
+  log_bucket_name = "phpboyscout-audit-logs-111122223333"
 
   tags = {
     Project    = "phpboyscout"

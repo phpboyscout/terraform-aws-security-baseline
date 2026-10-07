@@ -28,8 +28,8 @@ module "aws_config" {
   source  = "gitlab.com/phpboyscout/security-baseline/aws//modules/aws-config"
   version = "0.2.0"
 
-  account_id         = "049815585546"
-  config_bucket_name = "phpboyscout-config-049815585546"
+  account_id         = "111122223333"
+  config_bucket_name = "phpboyscout-config-111122223333"
 
   tags = {
     Project    = "phpboyscout"

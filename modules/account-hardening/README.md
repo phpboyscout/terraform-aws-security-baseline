@@ -29,7 +29,7 @@ module "account_hardening" {
   source  = "gitlab.com/phpboyscout/security-baseline/aws//modules/account-hardening"
   version = "0.2.0"
 
-  account_id = "049815585546"
+  account_id = "111122223333"
 
   tags = {
     Project    = "phpboyscout"

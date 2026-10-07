@@ -34,7 +34,7 @@ module "alerts" {
   source  = "gitlab.com/phpboyscout/security-baseline/aws//modules/alerts"
   version = "0.2.0"
 
-  account_id   = "049815585546"
+  account_id   = "111122223333"
   alerts_email = "aws@phpboyscout.uk"
 
   tags = {

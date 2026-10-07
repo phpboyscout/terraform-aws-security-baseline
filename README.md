@@ -50,7 +50,7 @@ module "security_baseline" {
   source  = "gitlab.com/phpboyscout/security-baseline/aws"
   version = "0.2.2"
 
-  account_id   = "049815585546"
+  account_id   = "111122223333"
   region       = "eu-west-2"
   project_name = "phpboyscout"
   alerts_email = "aws@phpboyscout.uk"
