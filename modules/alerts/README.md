@@ -35,7 +35,7 @@ module "alerts" {
   version = "0.2.0"
 
   account_id   = "111122223333"
-  alerts_email = "aws@phpboyscout.uk"
+  alerts_email = "alerts@example.com"
 
   tags = {
     Project    = "phpboyscout"

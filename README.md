@@ -53,7 +53,7 @@ module "security_baseline" {
   account_id   = "111122223333"
   region       = "eu-west-2"
   project_name = "phpboyscout"
-  alerts_email = "aws@phpboyscout.uk"
+  alerts_email = "alerts@example.com"
 
   # Default settings: all six sub-modules enabled, primary-region-only
   # restriction on the operator role, 730-day audit log retention.

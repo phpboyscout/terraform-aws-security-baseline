@@ -14,7 +14,7 @@ tofu plan \
   -var 'account_id=111122223333' \
   -var 'region=eu-west-2' \
   -var 'project_name=phpboyscout' \
-  -var 'alerts_email=aws@phpboyscout.uk'
+  -var 'alerts_email=alerts@example.com'
 ```
 
 …or drop a `terraform.tfvars` next to `main.tf` (gitignored anyway
