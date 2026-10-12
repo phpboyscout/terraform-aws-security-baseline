@@ -34,7 +34,7 @@ module "account_hardening" {
   tags = {
     Project    = "phpboyscout"
     ManagedBy  = "opentofu"
-    Repository = "phpboyscout/infra"
+    Repository = "example-org/example-repo"
   }
 
   # Take over the IAM account alias (existing value must match).

@@ -61,7 +61,7 @@ module "security_baseline" {
   tags = {
     Project    = "phpboyscout"
     ManagedBy  = "opentofu"
-    Repository = "phpboyscout/infra"
+    Repository = "example-org/example-repo"
   }
 }
 ```

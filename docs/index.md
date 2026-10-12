@@ -49,9 +49,8 @@ callers can compose à la carte.
 
 - **[`phpboyscout/terraform-aws-bootstrap`][bootstrap]**: the
   pre-baseline module.
-- **[`phpboyscout/infra`](https://gitlab.com/phpboyscout/infra)**:
-  the first user of both modules; private, defines the AWS account
-  that supports `go-tool-base` and `rust-tool-base`.
+- The first user of both modules is a private repository that defines
+  the AWS account supporting `go-tool-base` and `rust-tool-base`.
 
 [bootstrap]: https://gitlab.com/phpboyscout/iac/terraform-aws-bootstrap
 
