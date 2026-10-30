@@ -112,7 +112,7 @@ at [aws-security-baseline.iac.phpboyscout.uk](https://aws-security-baseline.iac.
 | Name | Version |
 | ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0, < 7.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.70, < 7.0 |
 
 ## Providers
 
@@ -131,6 +131,7 @@ No resources.
 | <a name="input_alerts_email"></a> [alerts\_email](#input\_alerts\_email) | Email address subscribed to the alerts SNS topic. Required even when `enable_alerts = false` to keep the signature stable; ignored in that case. AWS will send a confirmation email on first apply. | `string` | n/a | yes |
 | <a name="input_allowed_regions"></a> [allowed\_regions](#input\_allowed\_regions) | Regions the operator role is permitted to operate in. Null defaults to `[var.region]` (single-region restriction). Pass a wider list for multi-region setups, or `[]` to disable the restriction entirely. | `list(string)` | `null` | no |
 | <a name="input_audit_retention_days"></a> [audit\_retention\_days](#input\_audit\_retention\_days) | Days noncurrent log object versions are retained before expiring. Applied to both the audit log bucket and the Config history bucket. Default 730 (two years) per the master spec's OQ4 resolution; override for stricter compliance regimes. | `number` | `730` | no |
+| <a name="input_aws_config_excluded_resource_types"></a> [aws\_config\_excluded\_resource\_types](#input\_aws\_config\_excluded\_resource\_types) | Resource types the aws-config recorder leaves out, such as the `AWS::EC2::Instance` churn of a spot fleet. Empty (the default) records every supported type. Non-empty switches the recorder to `EXCLUSION_BY_RESOURCE_TYPES` and stops it recording global types beyond the IAM types AWS records regardless. | `list(string)` | `[]` | no |
 | <a name="input_config_bucket_name"></a> [config\_bucket\_name](#input\_config\_bucket\_name) | Override for the Config history bucket name. Defaults to `<project_name>-config-<account_id>`. | `string` | `null` | no |
 | <a name="input_enable_account_hardening"></a> [enable\_account\_hardening](#input\_enable\_account\_hardening) | Whether to provision the account-hardening sub-module (password policy, S3 public-access block, EBS default encryption, optional alias adoption). | `bool` | `true` | no |
 | <a name="input_enable_alerts"></a> [enable\_alerts](#input\_enable\_alerts) | Whether to provision the alerts sub-module (SNS topic + email subscription + EventBridge rules). | `bool` | `true` | no |

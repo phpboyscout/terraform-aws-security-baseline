@@ -37,9 +37,10 @@ module "aws_config" {
   count  = var.enable_aws_config ? 1 : 0
   source = "./modules/aws-config"
 
-  account_id             = var.account_id
-  config_bucket_name     = local.config_bucket_name
-  history_retention_days = var.audit_retention_days
+  account_id              = var.account_id
+  config_bucket_name      = local.config_bucket_name
+  history_retention_days  = var.audit_retention_days
+  excluded_resource_types = var.aws_config_excluded_resource_types
 
   tags = var.tags
 }

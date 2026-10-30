@@ -262,13 +262,33 @@ data "aws_iam_policy_document" "config_bucket" {
 
 # ---------- Recorder + delivery channel + start logging ---------------
 
+locals {
+  excluding = length(var.excluded_resource_types) > 0
+}
+
 resource "aws_config_configuration_recorder" "this" {
   name     = var.recorder_name
   role_arn = aws_iam_role.this.arn
 
   recording_group {
-    all_supported                 = true
-    include_global_resource_types = var.include_global_resource_types
+    all_supported = !local.excluding
+    # AWS rejects true under exclusion; IAM is still recorded in regions
+    # that had Config before February 2022.
+    include_global_resource_types = local.excluding ? false : var.include_global_resource_types
+
+    dynamic "recording_strategy" {
+      for_each = local.excluding ? [1] : []
+      content {
+        use_only = "EXCLUSION_BY_RESOURCE_TYPES"
+      }
+    }
+
+    dynamic "exclusion_by_resource_types" {
+      for_each = local.excluding ? [1] : []
+      content {
+        resource_types = var.excluded_resource_types
+      }
+    }
   }
 
   depends_on = [aws_iam_role_policy_attachment.managed]

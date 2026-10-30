@@ -66,9 +66,20 @@ variable "config_kms_enable_key_rotation" {
 }
 
 variable "include_global_resource_types" {
-  description = "Whether the recorder includes global resource types (IAM, CloudFront, Route53, etc.). Enable on the primary region only — running in multiple regions duplicates the global-resource cost without adding signal."
+  description = "Whether the recorder includes global resource types (IAM, CloudFront, Route53, etc.). Enable on the primary region only — running in multiple regions duplicates the global-resource cost without adding signal. Ignored when `excluded_resource_types` is set: AWS requires `false` under the exclusion strategy, and still records IAM in Regions that had Config before February 2022."
   type        = bool
   default     = true
+}
+
+variable "excluded_resource_types" {
+  description = "Resource types the recorder leaves out, such as `AWS::EC2::Instance`. Empty records every supported type. Non-empty switches the recorder to `EXCLUSION_BY_RESOURCE_TYPES`, which still records new types as AWS adds them, and forces `include_global_resource_types` to `false`."
+  type        = list(string)
+  default     = []
+
+  validation {
+    condition     = alltrue([for t in var.excluded_resource_types : startswith(t, "AWS::")])
+    error_message = "excluded_resource_types entries must be AWS resource types starting with `AWS::`, such as `AWS::EC2::Instance`."
+  }
 }
 
 variable "snapshot_delivery_frequency" {

@@ -8,7 +8,8 @@ CMK; bucket and KMS policies scoped to the Config service principal).
 ## What you get
 
 - `aws_config_configuration_recorder` — records all supported resource
-  types; includes global resources by default.
+  types; includes global resources by default. `excluded_resource_types`
+  leaves named types out (see **Cost considerations**).
 - `aws_config_delivery_channel` — daily snapshots to the history
   bucket (configurable via `snapshot_delivery_frequency`).
 - `aws_config_configuration_recorder_status` — enables the recorder.
@@ -54,12 +55,29 @@ account, this typically lands at low single-digit dollars per month.
 For larger accounts (many EC2 instances, frequent IAM churn), it can
 run higher — review the AWS Config pricing page.
 
-To reduce cost without disabling Config entirely:
-- Switch to `EXCLUSION_BY_RESOURCE_TYPES` (out of scope for v0.1; use
-  the resource directly) and exclude high-churn types like
-  `AWS::EC2::Instance`.
-- Increase `snapshot_delivery_frequency` to `TwentyFour_Hours` (already
-  the default).
+To reduce cost without disabling Config entirely, exclude the
+high-churn types. A spot autoscaling fleet is the usual culprit:
+
+```hcl
+excluded_resource_types = [
+  "AWS::EC2::Instance",
+  "AWS::EC2::NetworkInterface",
+  "AWS::EC2::Volume",
+  "AWS::EC2::EC2Fleet",
+]
+```
+
+A non-empty list switches the recorder to `EXCLUSION_BY_RESOURCE_TYPES`.
+It still records every other supported type, including ones AWS adds
+later. The trade-off is that excluded types have no Config history and no
+Config-evaluated Security Hub controls; CloudTrail still logs their API
+calls. AWS requires `include_global_resource_types = false` under
+exclusion, so the module forces it. IAM users, groups, roles and customer
+managed policies are still recorded in any Region that had Config before
+February 2022.
+
+`snapshot_delivery_frequency` already defaults to `TwentyFour_Hours`, the
+cheapest setting.
 
 ## Why hand-rolled?
 
@@ -76,13 +94,13 @@ boilerplate. Not worth the dependency. Same logic as audit-logging.
 | Name | Version |
 | ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0, < 7.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.70, < 7.0 |
 
 ## Providers
 
 | Name | Version |
 | ---- | ------- |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0, < 7.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.70, < 7.0 |
 
 ## Resources
 
@@ -114,9 +132,10 @@ boilerplate. Not worth the dependency. Same logic as audit-logging.
 | <a name="input_config_kms_deletion_window_in_days"></a> [config\_kms\_deletion\_window\_in\_days](#input\_config\_kms\_deletion\_window\_in\_days) | Days the Config CMK lingers in PendingDeletion if scheduled for deletion. AWS-allowed range is 7-30. | `number` | `30` | no |
 | <a name="input_config_kms_enable_key_rotation"></a> [config\_kms\_enable\_key\_rotation](#input\_config\_kms\_enable\_key\_rotation) | Whether AWS automatically rotates the Config CMK's key material annually. | `bool` | `true` | no |
 | <a name="input_delivery_channel_name"></a> [delivery\_channel\_name](#input\_delivery\_channel\_name) | Name of the Config delivery channel. | `string` | `"default"` | no |
+| <a name="input_excluded_resource_types"></a> [excluded\_resource\_types](#input\_excluded\_resource\_types) | Resource types the recorder leaves out, such as `AWS::EC2::Instance`. Empty records every supported type. Non-empty switches the recorder to `EXCLUSION_BY_RESOURCE_TYPES`, which still records new types as AWS adds them, and forces `include_global_resource_types` to `false`. | `list(string)` | `[]` | no |
 | <a name="input_history_retention_days"></a> [history\_retention\_days](#input\_history\_retention\_days) | Days noncurrent Config history object versions are retained before expiring. Defaults to 730 (two years), matching audit-logging. | `number` | `730` | no |
 | <a name="input_iam_role_name"></a> [iam\_role\_name](#input\_iam\_role\_name) | Name of the IAM role Config assumes to record resources. | `string` | `"aws-config-recorder"` | no |
-| <a name="input_include_global_resource_types"></a> [include\_global\_resource\_types](#input\_include\_global\_resource\_types) | Whether the recorder includes global resource types (IAM, CloudFront, Route53, etc.). Enable on the primary region only — running in multiple regions duplicates the global-resource cost without adding signal. | `bool` | `true` | no |
+| <a name="input_include_global_resource_types"></a> [include\_global\_resource\_types](#input\_include\_global\_resource\_types) | Whether the recorder includes global resource types (IAM, CloudFront, Route53, etc.). Enable on the primary region only — running in multiple regions duplicates the global-resource cost without adding signal. Ignored when `excluded_resource_types` is set: AWS requires `false` under the exclusion strategy, and still records IAM in Regions that had Config before February 2022. | `bool` | `true` | no |
 | <a name="input_recorder_name"></a> [recorder\_name](#input\_recorder\_name) | Name of the Config configuration recorder. | `string` | `"default"` | no |
 | <a name="input_snapshot_delivery_frequency"></a> [snapshot\_delivery\_frequency](#input\_snapshot\_delivery\_frequency) | Frequency Config snapshots are delivered to the bucket. One of `One_Hour`, `Three_Hours`, `Six_Hours`, `Twelve_Hours`, `TwentyFour_Hours`. | `string` | `"TwentyFour_Hours"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags applied to every taggable resource this module creates. Merged on top of the consuming provider's `default_tags` — module-supplied tags win on key conflict. | `map(string)` | `{}` | no |
