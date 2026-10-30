@@ -1,5 +1,23 @@
 # Changelog
 
+## [v0.3.0](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/releases/v0.3.0)
+
+[Compare to previous version](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/compare/v0.2.2...v0.3.0)
+
+### Notes
+
+- The aws-config recorder can now leave out named resource types: set aws_config_excluded_resource_types to a list of AWS:: types (for a spot fleet, AWS::EC2::Instance, AWS::EC2::NetworkInterface, AWS::EC2::Volume and AWS::EC2::EC2Fleet). A non-empty list records every other supported type with EXCLUSION_BY_RESOURCE_TYPES and stops recording global types other than the IAM ones AWS records anyway. Leaving it unset changes nothing. This release requires hashicorp/aws >= 6.70; move a consumer on an older provider up before adopting it.
+
+- Releases are announced to the estate's release feed.
+
+### Features
+
+- **aws-config**: let the recorder exclude named resource types ([ceda331](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/commit/ceda33128fbbbce4146dfdb639ca77670c454ca4))
+
+### Bug Fixes
+
+- **aws-config**: treat a null exclusion list as empty ([95a69ea](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/commit/95a69ea31a7d302c612faf5a11fedd535a6154e2))
+
 ## [v0.2.2](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/releases/v0.2.2)
 
 [Compare to previous version](https://gitlab.com/phpboyscout/iac/terraform-aws-security-baseline/-/compare/v0.2.1...v0.2.2)
