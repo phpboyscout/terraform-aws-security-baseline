@@ -69,6 +69,7 @@ variable "aws_config_excluded_resource_types" {
   description = "Resource types the aws-config recorder leaves out, such as the `AWS::EC2::Instance` churn of a spot fleet. Empty (the default) records every supported type. Non-empty switches the recorder to `EXCLUSION_BY_RESOURCE_TYPES` and stops it recording global types beyond the IAM types AWS records regardless."
   type        = list(string)
   default     = []
+  nullable    = false
 
   validation {
     condition     = alltrue([for t in var.aws_config_excluded_resource_types : startswith(t, "AWS::")])

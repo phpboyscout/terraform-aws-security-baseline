@@ -75,6 +75,7 @@ variable "excluded_resource_types" {
   description = "Resource types the recorder leaves out, such as `AWS::EC2::Instance`. Empty records every supported type. Non-empty switches the recorder to `EXCLUSION_BY_RESOURCE_TYPES`, which still records new types as AWS adds them, and forces `include_global_resource_types` to `false`."
   type        = list(string)
   default     = []
+  nullable    = false
 
   validation {
     condition     = alltrue([for t in var.excluded_resource_types : startswith(t, "AWS::")])
